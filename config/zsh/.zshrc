@@ -8,11 +8,19 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Keep PATH/fpath entries unique (no duplicates as you re-source).
+typeset -U path PATH fpath
+
 # ---------------------------------------------------------------------------
 # oh-my-zsh
 # ---------------------------------------------------------------------------
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Behaviour preferences.
+zstyle ':omz:update' mode disabled   # don't auto-update oh-my-zsh
+DISABLE_AUTO_TITLE="true"            # let tmux/terminal manage the title
+DISABLE_UNTRACKED_FILES_DIRTY="true" # faster git status in big repos
 
 # Plugin order matters: completions before compinit-dependent ones, and
 # fast-syntax-highlighting should come last.
@@ -40,7 +48,23 @@ plugins=(
 # zsh-completions needs its functions on fpath before compinit (run by OMZ).
 fpath+=("$ZSH/custom/plugins/zsh-completions/src")
 
+# Cache completions for faster shell startup.
+ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-$HOME/.cache/oh-my-zsh}"
+mkdir -p "$ZSH_CACHE_DIR"
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$ZSH_CACHE_DIR"
+
 source "$ZSH/oh-my-zsh.sh"
+
+# ---------------------------------------------------------------------------
+# History search keybindings (history-substring-search plugin)
+# ---------------------------------------------------------------------------
+# Up/Down: search history by the text already typed.
+bindkey "$terminfo[kcuu1]" history-beginning-search-backward
+bindkey "$terminfo[kcud1]" history-beginning-search-forward
+# Ctrl+P / Ctrl+N: substring search through history.
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
 
 # ---------------------------------------------------------------------------
 # Aliases
@@ -76,3 +100,11 @@ export PATH="$HOME/.local/bin:$PATH"
 # Powerlevel10k prompt config.
 # ---------------------------------------------------------------------------
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# ---------------------------------------------------------------------------
+# Machine-local overrides — NOT tracked in this repo.
+# Put work/secret/host-specific aliases, exports, and tool init in
+# ~/.zshrc.local (e.g. company VPN paths, kube tokens, SDKMAN, nvm). It stays
+# off GitHub while everything generic lives in this shared file.
+# ---------------------------------------------------------------------------
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
