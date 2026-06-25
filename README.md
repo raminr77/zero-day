@@ -38,7 +38,7 @@ OS is detected automatically; macOS skips the Linux-only modules.
 Your real dotfiles live under [`config/`](config/) and are **symlinked** onto the
 machine, so the repo is the single source of truth:
 
-```
+```txt
 config/zsh/.zshrc        config/git/.gitconfig
 config/zsh/.p10k.zsh     config/tmux/.tmux.conf
 config/nvim/init.lua
@@ -97,14 +97,14 @@ make dry-run  # preview without changes
 ```bash
 docker run -it --rm ubuntu:24.04 bash -c '
   apt-get update && apt-get install -y curl &&
-  curl -fsSL https://raw.githubusercontent.com/<you>/zero-day/main/install.sh | bash'
+  curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/install.sh | bash'
 ```
 
 ---
 
 ## Layout
 
-```
+```txt
 install.sh        bootstrap entrypoint (curl | bash)
 setup.sh          orchestrator: sources libs, runs modules in order
 lib/ui.sh         pretty CLI: colours, banner, spinner, prompts
