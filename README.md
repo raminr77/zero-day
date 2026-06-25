@@ -1,5 +1,8 @@
 # zero-day · one-command machine setup
 
+[![CI](https://github.com/raminr77/zero-day/actions/workflows/ci.yml/badge.svg)](https://github.com/raminr77/zero-day/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Provision a fresh **Ubuntu/Debian server** or **macOS laptop** from nothing with
 a single command: system update, all your tools, your shell, and your config files.
 
@@ -58,8 +61,19 @@ they're symlinks). Existing files are backed up to `*.bak.<timestamp>`.
 ./setup.sh --dry-run          # show what would run
 ```
 
-Non-interactive values (git name/email, SSH key) can be supplied via a
-git-ignored `.env` — see [`.env.example`](.env.example).
+### Interactive by default — `.env` is optional
+
+You don't need any config file. When run, `setup.sh` **asks for whatever it
+needs** along the way (git name/email, whether to add an SSH key, etc.), and
+prompts work even under `curl | bash` because they read from your terminal.
+
+If you'd rather run **fully unattended** (no prompts), drop the values into a
+git-ignored `.env` (see [`.env.example`](.env.example)) or pass them inline:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/install.sh \
+  | GIT_NAME="Ramin" GIT_EMAIL="you@example.com" bash
+```
 
 ---
 
@@ -112,4 +126,11 @@ lib/common.sh     OS detection, package helpers, linking, SSH keys
 modules/          one file per step (NN-name.sh)
 config/           your dotfiles (symlink sources)
 tests/            bats unit tests for the pure helpers
+.github/          CI workflow (shellcheck + bats + integration)
 ```
+
+---
+
+## License
+
+[MIT](LICENSE) © Ramin Rezaei

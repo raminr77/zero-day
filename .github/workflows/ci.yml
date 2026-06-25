@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Lint all shell scripts
+        run: shellcheck -x install.sh setup.sh lib/*.sh modules/*.sh
+
+  test:
+    name: Bats unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install bats
+        run: sudo apt-get update && sudo apt-get install -y bats
+      - name: Run test suite
+        run: bats tests/
+
+  integration:
+    name: Integration (Ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dry-run lists all modules
+        run: ./setup.sh --dry-run --yes
+
+      - name: Dotfiles linking into an isolated HOME
+        shell: bash
+        run: |
+          set -euo pipefail
+          export HOME="$(mktemp -d)" CI=1
+          source lib/ui.sh
+          source lib/common.sh
+          export DOTFILES_OS=debian DOTFILES_ROOT="$PWD"
+          source modules/60-dotfiles.sh
+          for f in .zshrc .p10k.zsh .gitconfig .tmux.conf .config/nvim/init.lua; do
+            test -L "$HOME/$f" || { echo "missing symlink: $f"; exit 1; }
+          done
+          echo "All dotfiles linked."
+
+      - name: SSH key authorisation (non-interactive)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export HOME="$(mktemp -d)" CI=1
+          source lib/ui.sh
+          source lib/common.sh
+          KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOabc123DEFxyz789TESTKEYvalue000111222 ci@test"
+          export DOTFILES_OS=debian SSH_PUBLIC_KEY="$KEY"
+          source modules/75-ssh.sh
+          grep -q "ci@test" "$HOME/.ssh/authorized_keys"
+          test "$(stat -c '%a' "$HOME/.ssh")" = "700"
+          test "$(stat -c '%a' "$HOME/.ssh/authorized_keys")" = "600"
+          echo "SSH key authorised with correct permissions."

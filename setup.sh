@@ -22,11 +22,15 @@ source "$DOTFILES_ROOT/lib/ui.sh"
 source "$DOTFILES_ROOT/lib/common.sh"
 
 # --- load optional .env ----------------------------------------------------
+# .env is entirely optional. When absent, every module prompts interactively for
+# whatever it needs (and falls back to safe defaults if there is no terminal).
+DOTFILES_ENV_LOADED=""
 if [[ -f "$DOTFILES_ROOT/.env" ]]; then
   set -a
   # shellcheck disable=SC1091
   source "$DOTFILES_ROOT/.env"
   set +a
+  DOTFILES_ENV_LOADED=1
 fi
 
 # --- parse arguments -------------------------------------------------------
@@ -64,6 +68,11 @@ should_run() {
 main() {
   ui_banner
   ui_info "Detected OS: ${UI_BOLD}${DOTFILES_OS}${UI_RESET}"
+  if [[ -n "$DOTFILES_ENV_LOADED" ]]; then
+    ui_info "Loaded settings from .env"
+  else
+    ui_info "No .env found — I'll ask for anything I need as we go."
+  fi
 
   if [[ "$DOTFILES_OS" == "unsupported" ]]; then
     ui_die "Unsupported OS. This installer targets macOS and Debian/Ubuntu."
