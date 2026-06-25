@@ -7,8 +7,14 @@
 ui_section "Node.js, npm, pnpm, yarn"
 
 install_node_debian() {
-  # NodeSource LTS repository.
-  curl -fsSL https://deb.nodesource.com/setup_lts.x | maybe_sudo -E bash -
+  # NodeSource LTS repository. Download the setup script, then run it as root.
+  # (Piping straight into `sudo -E bash` breaks when already root, since our
+  #  maybe_sudo runs the args directly and "-E" isn't a command.)
+  local script
+  script="$(mktemp)"
+  curl -fsSL https://deb.nodesource.com/setup_lts.x -o "$script"
+  maybe_sudo bash "$script"
+  rm -f "$script"
   pkg_install nodejs
 }
 
