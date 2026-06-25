@@ -29,6 +29,12 @@ fi
 git config --global init.defaultBranch main
 git config --global pull.rebase false
 git config --global push.autoSetupRemote true
-has nvim && git config --global core.editor "nvim"
+if has nvim; then git config --global core.editor "nvim"; fi
+
+# Credential helper, per platform: macOS keychain, in-memory cache on Linux.
+case "$DOTFILES_OS" in
+  macos)  git config --global credential.helper osxkeychain ;;
+  debian) git config --global credential.helper "cache --timeout=3600" ;;
+esac
 
 ui_ok "Git configured."
