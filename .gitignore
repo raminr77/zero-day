@@ -1,0 +1,12 @@
+# Local, machine-specific, or secret files — never commit these.
+.env
+*.bak
+*.bak.*
+
+# Test/tooling artifacts
+tests/bats/
+tests/bats-*/
+*.log
+
+# OS noise
+.DS_Store

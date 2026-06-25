@@ -1,0 +1,39 @@
+# ~/.gitconfig — shared git settings (symlinked from the dotfiles repo).
+# Personal identity (user.name / user.email) is set by module 70-git.sh into
+# your global config and intentionally NOT tracked here.
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[push]
+	autoSetupRemote = true
+	default = simple
+
+[fetch]
+	prune = true
+
+[color]
+	ui = auto
+
+[core]
+	pager = less -FRX
+
+[diff]
+	colorMoved = default
+
+[alias]
+	st = status -sb
+	co = checkout
+	br = branch
+	ci = commit
+	cm = commit -m
+	aa = add --all
+	df = diff
+	dc = diff --cached
+	lg = log --oneline --graph --decorate --all
+	last = log -1 HEAD
+	unstage = reset HEAD --
+	amend = commit --amend --no-edit
