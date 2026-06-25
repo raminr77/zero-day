@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# install.sh — one-line bootstrap entrypoint.
+# install.sh — one-line bootstrap entrypoint for zero-day.
 #
-#   curl -fsSL https://raw.githubusercontent.com/<user>/dotfiles/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/<user>/zero-day/main/install.sh | bash
 #
-# It ensures git exists, clones (or updates) the repo into ~/.dotfiles, then
+# It ensures git exists, clones (or updates) the repo into ~/.zero-day, then
 # hands off to setup.sh inside the checkout so the full tree (lib, modules,
 # config) is available locally.
 set -euo pipefail
 
 # --- configuration (override via environment) ------------------------------
-REPO_URL="${DOTFILES_REPO:-https://github.com/ramin/dotfiles.git}"
-TARGET_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+REPO_URL="${DOTFILES_REPO:-https://github.com/ramin/zero-day.git}"
+TARGET_DIR="${DOTFILES_DIR:-$HOME/.zero-day}"
 BRANCH="${DOTFILES_BRANCH:-main}"
 
 say() { printf '\033[36m➜\033[0m %s\n' "$*"; }

@@ -50,7 +50,8 @@ ui_banner() {
 
    ╔══════════════════════════════════════════════════════╗
    ║                                                      ║
-   ║       d o t f i l e s   ·   m a c h i n e   setup    ║
+   ║      z e r o - d a y   ·   m a c h i n e   setup     ║
+   ║      provision a fresh box from nothing              ║
    ║                                                      ║
    ╚══════════════════════════════════════════════════════╝
 ART

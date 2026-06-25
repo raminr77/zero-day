@@ -1,15 +1,15 @@
-# dotfiles · one-command machine setup
+# zero-day · one-command machine setup
 
-Provision a fresh **Ubuntu/Debian server** or **macOS laptop** with a single
-command: system update, all your tools, your shell, and your config files.
+Provision a fresh **Ubuntu/Debian server** or **macOS laptop** from nothing with
+a single command: system update, all your tools, your shell, and your config files.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<you>/dotfiles/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/<you>/zero-day/main/install.sh | bash
 ```
 
 > Replace `<you>` with your GitHub username (and update `DOTFILES_REPO` in
 > [`install.sh`](install.sh)). The bootstrap installs `git`, clones this repo to
-> `~/.dotfiles`, then runs [`setup.sh`](setup.sh).
+> `~/.zero-day`, then runs [`setup.sh`](setup.sh).
 
 The script is **idempotent** — safe to run again any time to top up a machine.
 
@@ -98,7 +98,7 @@ make dry-run  # preview without changes
 ```bash
 docker run -it --rm ubuntu:24.04 bash -c '
   apt-get update && apt-get install -y curl &&
-  curl -fsSL https://raw.githubusercontent.com/<you>/dotfiles/main/install.sh | bash'
+  curl -fsSL https://raw.githubusercontent.com/<you>/zero-day/main/install.sh | bash'
 ```
 
 ---
