@@ -28,8 +28,10 @@ if has corepack; then
   ui_run "Activate yarn" corepack prepare yarn@stable --activate || true
 else
   ui_warn "corepack not found; installing pnpm/yarn via npm"
-  has npm && ui_run "npm i -g pnpm yarn" npm install -g pnpm yarn || true
+  if has npm; then
+    ui_run "npm i -g pnpm yarn" npm install -g pnpm yarn || true
+  fi
 fi
 
-has node && ui_ok "node $(node -v)"
-has npm  && ui_ok "npm $(npm -v)"
+if has node; then ui_ok "node $(node -v)"; fi
+if has npm;  then ui_ok "npm $(npm -v)"; fi

@@ -43,7 +43,7 @@ case "$DOTFILES_OS" in
     has lazydocker || ui_run "Install lazydocker" pkg_install lazydocker
     ;;
   debian)
-    arch="$(uname -m)"; [[ "$arch" == "aarch64" ]] && lg_arch="arm64" || lg_arch="x86_64"
+    if [[ "$(uname -m)" == "aarch64" ]]; then lg_arch="arm64"; else lg_arch="x86_64"; fi
     has lazygit || ui_run "Install lazygit" \
       install_github_binary jesseduffield/lazygit lazygit "lazygit_.*_Linux_${lg_arch}.tar.gz" \
       || ui_warn "lazygit install failed; install manually later."

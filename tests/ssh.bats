@@ -44,8 +44,10 @@ RSA="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDexampleBODY1234567890+/abcXYZ== user
   grep -qF "$ED25519" "$home/.ssh/authorized_keys"
 
   # Permissions: .ssh = 700, authorized_keys = 600.
-  perm_dir="$(stat -f '%Lp' "$home/.ssh" 2>/dev/null || stat -c '%a' "$home/.ssh")"
-  perm_file="$(stat -f '%Lp' "$home/.ssh/authorized_keys" 2>/dev/null || stat -c '%a' "$home/.ssh/authorized_keys")"
+  # Try GNU stat (-c) first, then fall back to BSD/macOS stat (-f). Ordering
+  # matters: on Linux `stat -f` means --file-system and would pollute output.
+  perm_dir="$(stat -c '%a' "$home/.ssh" 2>/dev/null || stat -f '%Lp' "$home/.ssh")"
+  perm_file="$(stat -c '%a' "$home/.ssh/authorized_keys" 2>/dev/null || stat -f '%Lp' "$home/.ssh/authorized_keys")"
   [ "$perm_dir" = "700" ]
   [ "$perm_file" = "600" ]
   rm -rf "$home"
