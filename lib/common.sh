@@ -60,6 +60,23 @@ pkg_install() {
   esac
 }
 
+# pkg_install_each pkg1 pkg2 ...
+# Installs packages ONE AT A TIME so a single unavailable package (e.g. a name
+# that differs across releases) only gets skipped with a warning instead of
+# aborting the whole batch — and the transaction. Always returns 0, so it never
+# trips `set -e` in the caller. Use for "nice to have" tool groups.
+pkg_install_each() {
+  local pkg
+  for pkg in "$@"; do
+    if pkg_install "$pkg" >/dev/null 2>&1; then
+      ui_ok "installed $pkg"
+    else
+      ui_warn "skipped $pkg (no install candidate)"
+    fi
+  done
+  return 0
+}
+
 # ---------------------------------------------------------------------------
 # Dotfile linking
 # ---------------------------------------------------------------------------
