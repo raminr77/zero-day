@@ -49,10 +49,8 @@ ui_banner() {
   cat >&2 <<'ART'
 
    ╔══════════════════════════════════════════════════════╗
-   ║                                                      ║
-   ║      z e r o - d a y   ·   m a c h i n e   setup     ║
-   ║      provision a fresh box from nothing              ║
-   ║                                                      ║
+   ║      zero-day   ·   Machine Setup                    ║
+   ║      Provision a fresh box from nothing              ║
    ╚══════════════════════════════════════════════════════╝
 ART
   printf '%s' "$UI_RESET" >&2
