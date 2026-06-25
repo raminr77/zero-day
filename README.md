@@ -4,10 +4,9 @@ Provision a fresh **Ubuntu/Debian server** or **macOS laptop** from nothing with
 a single command: system update, all your tools, your shell, and your config files.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<you>/zero-day/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/install.sh | bash
 ```
 
-> Replace `<you>` with your GitHub username (and update `DOTFILES_REPO` in
 > [`install.sh`](install.sh)). The bootstrap installs `git`, clones this repo to
 > `~/.zero-day`, then runs [`setup.sh`](setup.sh).
 
@@ -17,18 +16,18 @@ The script is **idempotent** — safe to run again any time to top up a machine.
 
 ## What it does
 
-| Module | What it installs / configures |
-|--------|-------------------------------|
-| `00-update`   | `apt update && upgrade` / Homebrew install + `brew upgrade` |
+| Module        | What it installs / configures                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------ |
+| `00-update`   | `apt update && upgrade` / Homebrew install + `brew upgrade`                                      |
 | `10-base`     | git, curl, wget, htop + modern CLI: bat, eza, fd, ripgrep, fzf, zoxide, jq, yq, tldr, btop, ncdu |
-| `20-zsh`      | zsh, oh-my-zsh, **Powerlevel10k**, and all your plugins |
-| `30-node`     | Node.js (LTS), npm, pnpm + yarn (via corepack) |
-| `40-docker`   | Docker Engine + Compose (Linux) / Docker Desktop (macOS) |
-| `50-extra`    | tmux, neovim, lazygit, lazydocker, direnv, mise |
-| `60-dotfiles` | symlinks `config/*` into `$HOME` (backs up existing files) |
-| `70-git`      | git identity + sensible defaults |
-| `75-ssh`      | **(Linux)** optionally authorise an SSH public key |
-| `80-security` | **(Linux)** ufw firewall, fail2ban, unattended-upgrades |
+| `20-zsh`      | zsh, oh-my-zsh, **Powerlevel10k**, and all your plugins                                          |
+| `30-node`     | Node.js (LTS), npm, pnpm + yarn (via corepack)                                                   |
+| `40-docker`   | Docker Engine + Compose (Linux) / Docker Desktop (macOS)                                         |
+| `50-extra`    | tmux, neovim, lazygit, lazydocker, direnv, mise                                                  |
+| `60-dotfiles` | symlinks `config/*` into `$HOME` (backs up existing files)                                       |
+| `70-git`      | git identity + sensible defaults                                                                 |
+| `75-ssh`      | **(Linux)** optionally authorise an SSH public key                                               |
+| `80-security` | **(Linux)** ufw firewall, fail2ban, unattended-upgrades                                          |
 
 OS is detected automatically; macOS skips the Linux-only modules.
 
