@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 40-docker.sh — Docker Engine + Compose plugin (Linux) / Docker Desktop (macOS).
+# 40-docker.sh: Docker Engine + Compose plugin (Linux) / Docker Desktop (macOS).
 
 ui_section "Docker"
 

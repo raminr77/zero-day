@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lib/common.sh — OS detection, package helpers, dotfile linking, SSH keys.
+# lib/common.sh: OS detection, package helpers, dotfile linking, SSH keys.
 #
 # Pure, side-effect-light helpers live here so they can be unit-tested with bats.
 # Anything that prints a result does so on stdout; status chatter uses lib/ui.sh.
@@ -63,7 +63,7 @@ pkg_install() {
 # pkg_install_each pkg1 pkg2 ...
 # Installs packages ONE AT A TIME so a single unavailable package (e.g. a name
 # that differs across releases) only gets skipped with a warning instead of
-# aborting the whole batch — and the transaction. Always returns 0, so it never
+# aborting the whole batch, and the transaction. Always returns 0, so it never
 # trips `set -e` in the caller. Use for "nice to have" tool groups.
 pkg_install_each() {
   local pkg

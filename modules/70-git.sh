@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 70-git.sh — set global git identity and sensible defaults.
+# 70-git.sh: set global git identity and sensible defaults.
 #
 # Name/email come from GIT_NAME / GIT_EMAIL (env or .env), or are prompted for.
 # The shared aliases/colours live in config/.gitconfig (linked in module 60);

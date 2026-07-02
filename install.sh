@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — one-line bootstrap entrypoint for zero-day.
+# install.sh: one-line bootstrap entrypoint for zero-day.
 #
 #   curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/install.sh | bash
 #
@@ -19,7 +19,7 @@ die() { printf '\033[31m✘ %s\033[0m\n' "$*" >&2; exit 1; }
 # --- detect OS for the bootstrap-level git install -------------------------
 ensure_git() {
   command -v git >/dev/null 2>&1 && return 0
-  say "git not found — installing it first"
+  say "git not found, installing it first"
   case "$(uname -s)" in
     Linux)
       if command -v apt-get >/dev/null 2>&1; then

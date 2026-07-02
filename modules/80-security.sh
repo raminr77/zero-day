@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 80-security.sh — (Linux only) baseline server hardening:
+# 80-security.sh: (Linux only) baseline server hardening:
 #   ufw firewall, fail2ban, and automatic security updates.
 
 [[ "$DOTFILES_OS" == "debian" ]] || return 0

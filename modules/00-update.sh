@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 00-update.sh — refresh the system package index and upgrade installed packages.
+# 00-update.sh: refresh the system package index and upgrade installed packages.
 # Sourced by setup.sh (libraries and DOTFILES_OS already in scope).
 
 ui_section "System update"

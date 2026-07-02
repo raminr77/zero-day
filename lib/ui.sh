@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lib/ui.sh — Pretty terminal UI primitives.
+# lib/ui.sh: Pretty terminal UI primitives.
 #
 # Provides colours, a banner, section headers, status lines, a spinner-backed
 # step runner, and interactive prompts. All output goes to stderr so that

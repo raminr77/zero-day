@@ -1,4 +1,4 @@
-# ~/.gitconfig — shared git settings (symlinked from the dotfiles repo).
+# ~/.gitconfig: shared git settings (symlinked from the dotfiles repo).
 # Personal identity (user.name / user.email) is set by module 70-git.sh into
 # your global config and intentionally NOT tracked here.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 60-dotfiles.sh — symlink the config files kept in this repo into $HOME.
+# 60-dotfiles.sh: symlink the config files kept in this repo into $HOME.
 #
 # This is the step that places your kept-in-repo configuration onto the machine.
 # Existing real files are backed up to <file>.bak.<timestamp> before linking.

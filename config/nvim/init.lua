@@ -1,4 +1,4 @@
--- ~/.config/nvim/init.lua — minimal, dependency-free Neovim config.
+-- ~/.config/nvim/init.lua: minimal, dependency-free Neovim config.
 -- Symlinked from the dotfiles repo. Extend with a plugin manager when you like.
 
 local opt = vim.opt

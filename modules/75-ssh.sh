@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 75-ssh.sh — (Linux only) optionally authorise an SSH public key for this user.
+# 75-ssh.sh: (Linux only) optionally authorise an SSH public key for this user.
 #
 # On a fresh server you usually want to drop in the public key from your laptop
 # so you can log in without a password. This asks, validates the key, and appends
@@ -30,5 +30,5 @@ ssh_add_authorized_key "$key" || rc=$?
 case $rc in
   0) ui_ok   "Public key added to ~/.ssh/authorized_keys" ;;
   1) ui_skip "That key is already authorised" ;;
-  2) ui_err  "That does not look like a valid SSH public key — skipped." ;;
+  2) ui_err  "That does not look like a valid SSH public key, skipped." ;;
 esac

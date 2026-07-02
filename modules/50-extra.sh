@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 50-extra.sh — tmux, neovim, lazygit, lazydocker, direnv, mise.
+# 50-extra.sh: tmux, neovim, lazygit, lazydocker, direnv, mise.
 
 ui_section "Extra developer tools"
 

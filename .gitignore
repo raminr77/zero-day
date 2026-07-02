@@ -1,4 +1,4 @@
-# Local, machine-specific, or secret files — never commit these.
+# Local, machine-specific, or secret files, never commit these.
 .env
 *.bak
 *.bak.*

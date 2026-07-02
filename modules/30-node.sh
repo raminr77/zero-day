@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 30-node.sh — Node.js with npm, plus pnpm and yarn via corepack.
+# 30-node.sh: Node.js with npm, plus pnpm and yarn via corepack.
 #
 # We prefer mise (installed in 50-extra) as the long-term version manager, but
 # this module guarantees a working node/npm/pnpm/yarn immediately.

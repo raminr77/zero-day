@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup.sh — orchestrator. Sources the libraries and runs each module in order.
+# setup.sh: orchestrator. Sources the libraries and runs each module in order.
 #
 # Usage:
 #   ./setup.sh [--yes] [--only NN[,NN...]] [--skip NN[,NN...]] [--dry-run]
@@ -71,7 +71,7 @@ main() {
   if [[ -n "$DOTFILES_ENV_LOADED" ]]; then
     ui_info "Loaded settings from .env"
   else
-    ui_info "No .env found — I'll ask for anything I need as we go."
+    ui_info "No .env found, I'll ask for anything I need as we go."
   fi
 
   if [[ "$DOTFILES_OS" == "unsupported" ]]; then

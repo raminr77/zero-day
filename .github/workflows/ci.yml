@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -18,7 +18,7 @@ jobs:
       - name: Install shellcheck
         run: sudo apt-get update && sudo apt-get install -y shellcheck
       - name: Lint all shell scripts
-        run: shellcheck -x install.sh setup.sh lib/*.sh modules/*.sh
+        run: shellcheck -x install.sh setup.sh lib/*.sh modules/*.sh n8n/install.sh
 
   test:
     name: Bats unit tests

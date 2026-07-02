@@ -13,7 +13,7 @@ curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/install.sh |
 > [`install.sh`](install.sh)). The bootstrap installs `git`, clones this repo to
 > `~/.zero-day`, then runs [`setup.sh`](setup.sh).
 
-The script is **idempotent** — safe to run again any time to top up a machine.
+The script is **idempotent**, safe to run again any time to top up a machine.
 
 ---
 
@@ -47,7 +47,7 @@ config/zsh/.p10k.zsh     config/tmux/.tmux.conf
 config/nvim/init.lua
 ```
 
-Edit them in the repo, commit, and re-run `setup.sh` (or just `git pull` —
+Edit them in the repo, commit, and re-run `setup.sh` (or just `git pull`,
 they're symlinks). Existing files are backed up to `*.bak.<timestamp>`.
 
 ---
@@ -61,7 +61,7 @@ they're symlinks). Existing files are backed up to `*.bak.<timestamp>`.
 ./setup.sh --dry-run          # show what would run
 ```
 
-### Interactive by default — `.env` is optional
+### Interactive by default: `.env` is optional
 
 You don't need any config file. When run, `setup.sh` **asks for whatever it
 needs** along the way (git name/email, whether to add an SSH key, etc.), and
@@ -86,12 +86,44 @@ your laptop (`cat ~/.ssh/id_ed25519.pub`) and it's appended to
 
 ---
 
+## Optional: self-hosted n8n
+
+Separate from machine setup, [`n8n/`](n8n/) contains a **standalone** installer
+that deploys [n8n](https://n8n.io) on a server as a production Docker stack:
+**n8n + PostgreSQL + Caddy** with automatic HTTPS. Run it whenever you like;
+it's independent of `setup.sh`.
+
+Run it the same way as the machine bootstrap, straight from the web (no `.env`
+or checkout needed):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/n8n/install.sh | bash
+```
+
+Or pass everything up front for a hands-off run (via flags or env vars):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/n8n/install.sh \
+  | bash -s -- --domain example.com --email you@example.com --yes
+```
+
+It runs like a CLI: prompts for anything not given via flag/env (root domain,
+subpath, TLS email, timezone), generates a complete `docker-compose.yml` +
+`Caddyfile`, and publishes n8n under a subpath, by default
+`https://<your-domain>/routine/`, with a Let's Encrypt certificate obtained
+automatically. Requires Docker (see module `40-docker`), a domain pointed at the
+server, and open ports 80/443.
+
+See [`n8n/README.md`](n8n/README.md) for details, flags, and day-two operations.
+
+---
+
 ## A note on version managers
 
 You use both the `pyenv` zsh plugin and `mise`. **mise** is the primary version
 manager here (Node, Python, etc. via `mise use -g node@lts`); the `pyenv` plugin
 stays enabled in `.zshrc` and activates only if `pyenv` is present. Pick whichever
-you prefer per language — they don't conflict.
+you prefer per language, they don't conflict.
 
 `fast-syntax-highlighting` is enabled in `.zshrc` (not `zsh-syntax-highlighting`)
 since the two conflict; both are cloned so you can switch by editing the plugin list.
@@ -124,6 +156,7 @@ setup.sh          orchestrator: sources libs, runs modules in order
 lib/ui.sh         pretty CLI: colours, banner, spinner, prompts
 lib/common.sh     OS detection, package helpers, linking, SSH keys
 modules/          one file per step (NN-name.sh)
+n8n/              standalone n8n deploy (Docker: n8n + Postgres + Caddy/HTTPS)
 config/           your dotfiles (symlink sources)
 tests/            bats unit tests for the pure helpers
 .github/          CI workflow (shellcheck + bats + integration)

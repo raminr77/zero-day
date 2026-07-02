@@ -1,4 +1,4 @@
-# ~/.zshrc — managed by the dotfiles repo (symlinked).
+# ~/.zshrc: managed by the dotfiles repo (symlinked).
 # Edit the copy in the repo, not this symlink target.
 
 # ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ bindkey -M emacs '^N' history-substring-search-down
 # ---------------------------------------------------------------------------
 alias c="clear"
 
-# Modern CLI tools — alias to the canonical names, accounting for Debian's
+# Modern CLI tools: alias to the canonical names, accounting for Debian's
 # alternative binary names (bat -> batcat, fd -> fdfind).
 if command -v batcat >/dev/null 2>&1; then alias bat="batcat"; fi
 if command -v fdfind >/dev/null 2>&1; then alias fd="fdfind"; fi
@@ -102,7 +102,7 @@ export PATH="$HOME/.local/bin:$PATH"
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # ---------------------------------------------------------------------------
-# Machine-local overrides — NOT tracked in this repo.
+# Machine-local overrides; NOT tracked in this repo.
 # Put work/secret/host-specific aliases, exports, and tool init in
 # ~/.zshrc.local (e.g. company VPN paths, kube tokens, SDKMAN, nvm). It stays
 # off GitHub while everything generic lives in this shared file.

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v ':0$')",
+      "Bash(shellcheck -x n8n/install.sh)",
+      "Bash(bash -n n8n/install.sh)",
+      "Bash(rm -rf __TRACKED_VAR__/t1)",
+      "Bash(./n8n/install.sh --yes --generate-only --domain flags.example.com --email me@flags.com --base-path /routine --timezone Asia/Tehran --tag 1.70.0 --dir __TRACKED_VAR__/t1)",
+      "Bash(shellcheck -x install.sh setup.sh lib/*.sh modules/*.sh n8n/install.sh)",
+      "Bash(rm -rf __TRACKED_VAR__/t1 __TRACKED_VAR__/t2 __TRACKED_VAR__/t3 __TRACKED_VAR__/pipedcwd)"
+    ]
+  }
+}

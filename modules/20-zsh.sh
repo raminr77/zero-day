@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 20-zsh.sh — zsh, oh-my-zsh, powerlevel10k theme, and external plugins.
+# 20-zsh.sh: zsh, oh-my-zsh, powerlevel10k theme, and external plugins.
 
 ui_section "Zsh, oh-my-zsh & Powerlevel10k"
 
@@ -23,7 +23,7 @@ ui_run "Install Powerlevel10k" clone_or_update \
   https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
 
 # 4) External plugins (built-in OMZ plugins need no clone).
-# "name|url" pairs — indexed array keeps this portable to bash 3.2 (macOS default).
+# "name|url" pairs; indexed array keeps this portable to bash 3.2 (macOS default).
 # zsh-syntax-highlighting is cloned too (it's in your toolset) even though .zshrc
 # enables fast-syntax-highlighting; keeps it available if you switch.
 PLUGINS="
