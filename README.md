@@ -26,6 +26,7 @@ The script is **idempotent**, safe to run again any time to top up a machine.
 | `20-zsh`      | zsh, oh-my-zsh, **Powerlevel10k**, and all your plugins                                          |
 | `30-node`     | Node.js (LTS), npm, pnpm + yarn (via corepack)                                                   |
 | `40-docker`   | Docker Engine + Compose (Linux) / Docker Desktop (macOS)                                         |
+| `45-caddy`    | Caddy web server + reverse proxy, auto-HTTPS (Linux: deploys config/caddy/Caddyfile)             |
 | `50-extra`    | tmux, neovim, lazygit, lazydocker, direnv, mise                                                  |
 | `60-dotfiles` | symlinks `config/*` into `$HOME` (backs up existing files)                                       |
 | `70-git`      | git identity + sensible defaults                                                                 |
@@ -44,11 +45,15 @@ machine, so the repo is the single source of truth:
 ```txt
 config/zsh/.zshrc        config/git/.gitconfig
 config/zsh/.p10k.zsh     config/tmux/.tmux.conf
-config/nvim/init.lua
+config/nvim/init.lua     config/caddy/Caddyfile
 ```
 
 Edit them in the repo, commit, and re-run `setup.sh` (or just `git pull`,
 they're symlinks). Existing files are backed up to `*.bak.<timestamp>`.
+
+Most land in `$HOME` (via `60-dotfiles`). `config/caddy/Caddyfile` is the
+exception: `45-caddy` symlinks it to `/etc/caddy/Caddyfile` on Linux and
+reloads the service. After editing it, run `sudo systemctl reload caddy`.
 
 ---
 
@@ -107,12 +112,12 @@ curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/n8n/install.
   | bash -s -- --domain example.com --email you@example.com --yes
 ```
 
-It runs like a CLI: prompts for anything not given via flag/env (root domain,
-subpath, TLS email, timezone), generates a complete `docker-compose.yml` +
-`Caddyfile`, and publishes n8n under a subpath, by default
-`https://<your-domain>/routine/`, with a Let's Encrypt certificate obtained
-automatically. Requires Docker (see module `40-docker`), a domain pointed at the
-server, and open ports 80/443.
+It runs like a CLI: prompts for anything not given via flag/env (domain, base
+path, TLS email, timezone), generates a complete `docker-compose.yml` +
+`Caddyfile`, and publishes n8n at your domain root (`https://<your-domain>/`)
+with a Let's Encrypt certificate obtained automatically. Serve it on a dedicated
+(sub)domain, not a subpath: n8n's subpath support is buggy. Requires Docker (see
+module `40-docker`), a domain pointed at the server, and open ports 80/443.
 
 See [`n8n/README.md`](n8n/README.md) for details, flags, and day-two operations.
 

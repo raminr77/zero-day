@@ -1,0 +1,51 @@
+# /etc/caddy/Caddyfile: base web-server / reverse-proxy config (symlinked from
+# this repo by modules/45-caddy.sh). Caddy gives you automatic HTTPS via Let's
+# Encrypt for any real domain you add below.
+#
+# Edit this file in the repo, commit, then re-run setup.sh (or `git pull`, it's
+# a symlink) and reload:  sudo systemctl reload caddy
+#
+# NOTE: the dockerised n8n stack in n8n/ ships its OWN Caddy and binds ports
+# 80/443. Run one or the other, not both. To front n8n with THIS host Caddy
+# instead, deploy the n8n stack without its Caddy and reverse-proxy to it here
+# (see the commented example at the bottom).
+
+# --- Global options ----------------------------------------------------------
+{
+	# Email used for ACME registration and certificate-expiry notices.
+	# Uncomment and set before serving a real domain over HTTPS:
+	# email you@example.com
+
+	# Use Let's Encrypt's staging CA while testing to avoid rate limits:
+	# acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+# --- Default site ------------------------------------------------------------
+# A harmless placeholder so `caddy validate` / `caddy run` works out of the box.
+# Replace it with your real site block(s) below, then reload Caddy.
+:80 {
+	respond "Caddy is running. Edit /etc/caddy/Caddyfile to add your sites." 200
+}
+
+# --- Examples (uncomment and adapt) ------------------------------------------
+# Static site with automatic HTTPS:
+# example.com {
+# 	encode zstd gzip
+# 	root * /var/www/example.com
+# 	file_server
+# }
+#
+# Reverse-proxy an app:
+# app.example.com {
+# 	encode zstd gzip
+# 	reverse_proxy 127.0.0.1:3000
+# }
+#
+# Front the n8n stack (running without its bundled Caddy) under /routine:
+# example.com {
+# 	encode zstd gzip
+# 	redir / /routine/ 302
+# 	handle /routine/* {
+# 		reverse_proxy 127.0.0.1:5678
+# 	}
+# }
