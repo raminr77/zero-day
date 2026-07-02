@@ -8,11 +8,19 @@ bring the stack up for you.
 This folder is independent of the machine-setup in the repo root, run it
 whenever you like, on its own, without touching `setup.sh`.
 
-n8n is published under a subpath, by default:
+n8n is published at the **root of your domain** (recommended):
 
 ```txt
-https://<your-domain>/routine/
+https://<your-domain>/
 ```
+
+> **Serve n8n at a domain root, not a subpath.** n8n's own subpath support
+> (`N8N_PATH`) is buggy: static assets get returned as HTML (causing
+> `Failed to load module script … MIME type 'text/html'` errors in the browser
+> console) and some redirects break. Use a dedicated (sub)domain instead, e.g.
+> `n8n.example.com`. No domain of your own? A wildcard DNS host works with zero
+> setup, e.g. `n8n.<server-ip>.nip.io`. The installer still offers a subpath
+> mode, but warns and asks for confirmation.
 
 ## What you get
 
@@ -79,7 +87,7 @@ missing values under `--yes` abort with a clear message.
 | Setting             | Flag          | Env var             | Default                            |
 | ------------------- | ------------- | ------------------- | ---------------------------------- |
 | Root domain         | `--domain`    | `N8N_DOMAIN`        | (required)                         |
-| Base path           | `--base-path` | `N8N_BASE_PATH`     | `/routine`                         |
+| Base path           | `--base-path` | `N8N_BASE_PATH`     | `/` (root; subpath discouraged)    |
 | Let's Encrypt email | `--email`     | `LETSENCRYPT_EMAIL` | (required)                         |
 | Timezone            | `--timezone`  | `GENERIC_TIMEZONE`  | auto-detected                      |
 | n8n image tag       | `--tag`       | `N8N_IMAGE_TAG`     | `latest`                           |
@@ -135,11 +143,32 @@ database. You can change the domain, path, timezone, or image tag freely.
 `.env` holds `N8N_ENCRYPTION_KEY`. **Losing it makes all stored credentials
 unrecoverable.** Back it up somewhere safe; it is intentionally git-ignored.
 
-## How the subpath works
+## Troubleshooting
 
-- n8n runs with `N8N_PATH=/routine/` and `WEBHOOK_URL` /
-  `N8N_EDITOR_BASE_URL` set to the full public URL.
-- Caddy `handle /routine/*` proxies to `n8n:5678` **without stripping** the
-  prefix, so requests reach n8n exactly as it expects.
-- The bare domain redirects to the editor; webhooks are published under
-  `https://<domain>/routine/webhook/…`.
+### Browser console: `Failed to load module script … MIME type 'text/html'`
+
+You deployed n8n under a **subpath** (e.g. `/routine`). n8n's subpath support is
+buggy: it returns its `index.html` for JavaScript/CSS asset requests, so the
+browser refuses them and the editor never loads. Switch to serving n8n at a
+**domain root**. Re-run the installer against the same stack directory (this
+reuses your encryption key and database, so nothing is lost):
+
+```bash
+cd <your stack dir>
+curl -fsSL https://raw.githubusercontent.com/raminr77/zero-day/main/n8n/install.sh \
+  | bash -s -- --domain n8n.example.com --base-path / --email you@example.com \
+               --dir "$PWD" --yes --generate-only
+docker compose down && docker compose up -d
+```
+
+No domain of your own? Use a wildcard DNS host, e.g.
+`--domain n8n.<server-ip>.nip.io`. Then open `https://<that-domain>/`.
+
+## How addressing works
+
+- **Root mode (recommended):** Caddy proxies the whole site to `n8n:5678`;
+  `WEBHOOK_URL` / `N8N_EDITOR_BASE_URL` are `https://<domain>/`. Webhooks are
+  published under `https://<domain>/webhook/…`.
+- **Subpath mode (discouraged):** n8n runs with `N8N_PATH=/<path>/` and Caddy
+  proxies `/<path>/*` without stripping the prefix. Works only partially (see
+  Troubleshooting above).
