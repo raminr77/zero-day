@@ -70,6 +70,10 @@ bindkey -M emacs '^N' history-substring-search-down
 # Aliases
 # ---------------------------------------------------------------------------
 alias c="clear"
+alias ips='ip4 && ip6 && ip0'
+alias ip0='echo "- Local IP: $(ipconfig getifaddr en0)"'
+alias ip4='echo "- IP v4: $(curl -s https://api.ipify.org)"'
+alias ip6='echo "- IP v6: $(curl -s https://api64.ipify.org)"'
 
 # Modern CLI tools: alias to the canonical names, accounting for Debian's
 # alternative binary names (bat -> batcat, fd -> fdfind).
