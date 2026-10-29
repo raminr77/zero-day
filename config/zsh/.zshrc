@@ -21,9 +21,13 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 zstyle ':omz:update' mode disabled   # don't auto-update oh-my-zsh
 DISABLE_AUTO_TITLE="true"            # let tmux/terminal manage the title
 DISABLE_UNTRACKED_FILES_DIRTY="true" # faster git status in big repos
+ZSH_DISABLE_COMPFIX="true"           # skip compaudit's permission scan on every start
 
 # Plugin order matters: completions before compinit-dependent ones, and
 # fast-syntax-highlighting should come last.
+# Left out on purpose (slow at startup): pyenv (~0.75s, runs `pyenv init` + rehash;
+# lazy-loaded below instead), gcloud (~0.35s), helm (spawns `helm completion` in
+# the background on every shell; cached once below instead).
 plugins=(
   git
   gh
@@ -31,10 +35,7 @@ plugins=(
   jsontools
   docker
   kubectl
-  helm
-  pyenv
   aws
-  gcloud
   dotenv
   colored-man-pages
   extract
@@ -50,7 +51,8 @@ fpath+=("$ZSH/custom/plugins/zsh-completions/src")
 
 # Cache completions for faster shell startup.
 ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-$HOME/.cache/oh-my-zsh}"
-mkdir -p "$ZSH_CACHE_DIR"
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
+fpath+=("$ZSH_CACHE_DIR/completions")
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "$ZSH_CACHE_DIR"
 
@@ -91,7 +93,32 @@ fi
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 command -v mise   >/dev/null 2>&1 && eval "$(mise activate zsh)"
-command -v pyenv  >/dev/null 2>&1 && eval "$(pyenv init - 2>/dev/null)"
+
+# pyenv: put shims on PATH now; run the slow `pyenv init` only on first use.
+if command -v pyenv >/dev/null 2>&1; then
+  export PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
+  path=("$PYENV_ROOT/shims" $path)
+  pyenv() {
+    unfunction pyenv
+    eval "$(command pyenv init - --no-rehash zsh)"
+    pyenv "$@"
+  }
+fi
+
+# helm: generate its completion once instead of on every shell. Delete
+# $ZSH_CACHE_DIR/completions/_helm after upgrading helm to refresh it.
+if command -v helm >/dev/null 2>&1; then
+  [[ -s "$ZSH_CACHE_DIR/completions/_helm" ]] \
+    || helm completion zsh >| "$ZSH_CACHE_DIR/completions/_helm" 2>/dev/null
+  alias h='helm'
+fi
+
+# gcloud: only add it to PATH (its slow completion script is skipped).
+for _gcloud_sdk in /opt/homebrew/share/google-cloud-sdk /usr/local/share/google-cloud-sdk \
+                   /usr/lib/google-cloud-sdk /usr/share/google-cloud-sdk "$HOME/google-cloud-sdk"; do
+  [[ -f "$_gcloud_sdk/path.zsh.inc" ]] && { source "$_gcloud_sdk/path.zsh.inc"; break; }
+done
+unset _gcloud_sdk
 
 # fzf key bindings & completion (path varies by platform/package).
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

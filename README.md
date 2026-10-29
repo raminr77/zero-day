@@ -125,10 +125,15 @@ See [`n8n/README.md`](n8n/README.md) for details, flags, and day-two operations.
 
 ## A note on version managers
 
-You use both the `pyenv` zsh plugin and `mise`. **mise** is the primary version
-manager here (Node, Python, etc. via `mise use -g node@lts`); the `pyenv` plugin
-stays enabled in `.zshrc` and activates only if `pyenv` is present. Pick whichever
-you prefer per language, they don't conflict.
+You use both `pyenv` and `mise`. **mise** is the primary version manager here
+(Node, Python, etc. via `mise use -g node@lts`). `pyenv` is lazy-loaded in
+`.zshrc`: its shims go on `PATH` at startup and the slow `pyenv init` runs only
+the first time you call `pyenv`. Pick whichever you prefer per language, they
+don't conflict.
+
+To keep shell startup fast, the oh-my-zsh `pyenv`, `gcloud` and `helm` plugins
+are not enabled; `.zshrc` adds their tools to `PATH` and caches helm's completion
+once instead.
 
 `fast-syntax-highlighting` is enabled in `.zshrc` (not `zsh-syntax-highlighting`)
 since the two conflict; both are cloned so you can switch by editing the plugin list.
